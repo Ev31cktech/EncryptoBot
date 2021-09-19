@@ -43,6 +43,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Numerics" />
     <Reference Include="System.Numerics.Vectors, Version=4.1.4.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Numerics.Vectors.4.5.0\lib\net46\System.Numerics.Vectors.dll</HintPath>
@@ -65,9 +66,24 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Statics.cs" />
     <Compile Include="UITabs\ConsolePanel.xaml.cs">
       <DependentUpon>ConsolePanel.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Utilities\DataConversion.cs" />
+    <Compile Include="Utilities\Processed\BallPrediction\BallPrediction.cs" />
+    <Compile Include="Utilities\Processed\BallPrediction\PredictionSlice.cs" />
+    <Compile Include="Utilities\Processed\FieldInfo\BoostPad.cs" />
+    <Compile Include="Utilities\Processed\FieldInfo\FieldInfo.cs" />
+    <Compile Include="Utilities\Processed\FieldInfo\GoalInfo.cs" />
+    <Compile Include="Utilities\Processed\Packet\Ball.cs" />
+    <Compile Include="Utilities\Processed\Packet\BoostPadState.cs" />
+    <Compile Include="Utilities\Processed\Packet\GameInfo.cs" />
+    <Compile Include="Utilities\Processed\Packet\Orientation.cs" />
+    <Compile Include="Utilities\Processed\Packet\Packet.cs" />
+    <Compile Include="Utilities\Processed\Packet\Physics.cs" />
+    <Compile Include="Utilities\Processed\Packet\Player.cs" />
+    <Compile Include="Utilities\Processed\Packet\TeamInfo.cs" />
     <Page Include="EncryptoBot GUI.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
