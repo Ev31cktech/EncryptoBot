@@ -13,25 +13,48 @@ namespace EncryptoBot
 	public partial class EncryptoBotGui : Window
 	{
 		Thread botManagerThread;
-		private ControlWriter consoleWriter = new ControlWriter();
+		private ControlWriter consoleWriter;
 		const int port = 45031;
+		Properties.Settings settings = new Properties.Settings();
 		public EncryptoBotGui()
 		{
 			InitializeComponent();
+			Height = settings.WindowHeight;
+			Width = settings.WindowWidth;
+			WindowState = (WindowState) settings.WindowState;
+
 			RLBotDotNet.BotManager<EncryptoAgent> botManager = new RLBotDotNet.BotManager<EncryptoAgent>(0);
 			botManagerThread = new Thread(() => botManager.Start(port));
+			consoleWriter = new ControlWriter(ConsolePNL.ConsoleTBK);
 			Console.SetOut(consoleWriter);
+		}
+
+		private void Window_Closed(object sender, EventArgs e)
+		{
+			settings.WindowHeight = Height;
+			settings.WindowWidth = Width;
+			settings.WindowState = (int)WindowState;
+
+			settings.Save();
 		}
 	}
 	class ControlWriter : TextWriter
 	{
-		public Control control { get; private set;}
-		public override Encoding Encoding{get { return Encoding.ASCII; }}
+		public TextBlock textBlock { get; private set; }
+		public override Encoding Encoding { get { return Encoding.ASCII; } }
 
-		public ControlWriter(Control _control)
+		public ControlWriter(TextBlock _control)
 		{
-			control = _control;
+			textBlock = _control;
+		}
+		public override void Write(char value)
+		{
+			textBlock.Text += value;
 		}
 
+		public override void Write(string value)
+		{
+			textBlock.Text += value;
+		}
 	}
 }
