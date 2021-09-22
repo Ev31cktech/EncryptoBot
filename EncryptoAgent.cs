@@ -44,14 +44,22 @@ namespace EncryptoBot
 			Physics carObject = packet.Players[Index].Physics;
 			float distance = Vector3.Distance(carObject.Location, targetLoc);
 			Renderer.DrawLine3D(Color.Yellow, carObject.Location, targetLoc);
+			Renderer.DrawLine3D(Color.Black, carObject.Location, carObject.Location + carObject.Velocity);
+			Vector3 DirectionVect = new Vector3()
+			{
+				X = carObject.Velocity.X + carObject.AngularVelocity.Y,
+				Y = carObject.Velocity.Y + carObject.AngularVelocity.Z,
+				Z = carObject.Velocity.Z + carObject.AngularVelocity.X
+			};
+			Renderer.DrawLine3D(Color.Green, carObject.Location, carObject.Location + DirectionVect);
 			Vector3 targetRelLoc = Orientation.RelativeLocation(carObject.Location, targetLoc, carObject.Rotation);
 
 			if (distance > CLOSE_TARGET)
 			{
 				targetRelLoc.X = Math.Abs(targetRelLoc.X);
 			}
-			Renderer.DrawString2D(String.Format("Velocity: {0}", carObject.Velocity.ToString("0000.00")), Color.White, new Vector2(2, 2), 1, 1);
-			Renderer.DrawString2D(String.Format("Angular: {0}", carObject.AngularVelocity.ToString("0000.00")), Color.White, new Vector2(2, 20), 1, 1);
+			Renderer.DrawString2D(String.Format("Velocity: {0}", carObject.Velocity.ToString("0000.00\t")), Color.White, new Vector2(2, 2), 1, 1);
+			Renderer.DrawString2D(String.Format("Angular: {0}", carObject.AngularVelocity.ToString("0000.00\t")), Color.White, new Vector2(2, 20), 1, 1);
 			Renderer.DrawString2D(String.Format("Dist: {0}", distance.ToString("0000.00")), Color.White, new Vector2(2, 40), 1, 1);
 			ctrl.Throttle = Vector3.Clamp(targetRelLoc,Vectors.Vector3Min, Vectors.Vector3Max).X;
 			ctrl.Steer = Vector3.Clamp(targetRelLoc,Vectors.Vector3Min, Vectors.Vector3Max).Y;
