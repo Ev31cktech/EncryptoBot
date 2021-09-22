@@ -10,6 +10,14 @@ namespace EncryptoBot
 {
 	class EncryptoAgent : RLBotDotNet.Bot
 	{
+		/// Customization<summary>
+		/// Body:	Breakout Type-S
+		/// Livery:	Encryption
+		/// Hat:	Top-Hat
+		/// Wheels:	Stella inverted
+		/// Trail:	Matrix
+		/// 
+		/// </summary>
 		DateTime time;
 		int fieldLocInt = 0;
 		float carHeigt = 0;
