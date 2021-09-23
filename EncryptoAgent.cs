@@ -15,7 +15,7 @@ namespace EncryptoBot
 		/// Livery:	Encryption
 		/// Hat:	Top-Hat
 		/// Wheels:	Stella inverted
-		/// Trail:	Matrix
+		/// Trail:	Binary
 		/// 
 		/// </summary>
 		DateTime time;
@@ -24,7 +24,9 @@ namespace EncryptoBot
 		Packet packet;
 
 		public EncryptoAgent(string botName, int botTeam, int botIndex) : base(botName, botTeam, botIndex)
-		{}
+		{
+			Console.WriteLine("bot {0} has joined {1}", botName, botTeam);
+		}
 		public override Controller GetOutput(rlbot.flat.GameTickPacket gameTickPacket)
 		{
 			packet = new Packet(gameTickPacket);
@@ -34,8 +36,15 @@ namespace EncryptoBot
 
 			float Distance = Vector3.Distance(carLocation, tarLoc);
 			if (Distance < 200)
-				fieldLocInt =++fieldLocInt % 4;
-			return DriveTo(tarLoc);
+				fieldLocInt = ++fieldLocInt % 4;
+			tarLoc = new Vector3(0, 0, 0);
+			//return 
+			DriveTo(tarLoc);
+			return new Controller()
+			{
+				Steer = 1,
+				Throttle = 1
+			};
 		}
 		public Controller DriveTo(Vector3 targetLoc) { return DriveTo(targetLoc, new Controller()); }
 		public Controller DriveTo(Vector3 targetLoc, Controller ctrl)
@@ -43,26 +52,17 @@ namespace EncryptoBot
 			const int CLOSE_TARGET = 1000;
 			Physics carObject = packet.Players[Index].Physics;
 			float distance = Vector3.Distance(carObject.Location, targetLoc);
-			Renderer.DrawLine3D(Color.Yellow, carObject.Location, targetLoc);
-			Renderer.DrawLine3D(Color.Black, carObject.Location, carObject.Location + carObject.Velocity);
-			Vector3 DirectionVect = new Vector3()
-			{
-				X = carObject.Velocity.X + carObject.AngularVelocity.Y,
-				Y = carObject.Velocity.Y + carObject.AngularVelocity.Z,
-				Z = carObject.Velocity.Z + carObject.AngularVelocity.X
-			};
-			Renderer.DrawLine3D(Color.Green, carObject.Location, carObject.Location + DirectionVect);
+			Vector3 RelVelocity = carObject.Location + (carObject.Velocity * new Vector3(-1, 1, -1));
 			Vector3 targetRelLoc = Orientation.RelativeLocation(carObject.Location, targetLoc, carObject.Rotation);
+			Renderer.DrawLine3D(Color.Yellow, carObject.Location, targetLoc);
+			Renderer.DrawLine3D(Color.Green, carObject.Location, RelVelocity);
 
 			if (distance > CLOSE_TARGET)
 			{
 				targetRelLoc.X = Math.Abs(targetRelLoc.X);
 			}
-			Renderer.DrawString2D(String.Format("Velocity: {0}", carObject.Velocity.ToString("0000.00\t")), Color.White, new Vector2(2, 2), 1, 1);
-			Renderer.DrawString2D(String.Format("Angular: {0}", carObject.AngularVelocity.ToString("0000.00\t")), Color.White, new Vector2(2, 20), 1, 1);
-			Renderer.DrawString2D(String.Format("Dist: {0}", distance.ToString("0000.00")), Color.White, new Vector2(2, 40), 1, 1);
-			ctrl.Throttle = Vector3.Clamp(targetRelLoc,Vectors.Vector3Min, Vectors.Vector3Max).X;
-			ctrl.Steer = Vector3.Clamp(targetRelLoc,Vectors.Vector3Min, Vectors.Vector3Max).Y;
+			ctrl.Throttle = Vector3.Clamp(targetRelLoc, Vectors.Vector3Min, Vectors.Vector3Max).X;
+			ctrl.Steer = Vector3.Clamp(targetRelLoc, Vectors.Vector3Min, Vectors.Vector3Max).Y;
 			return ctrl;
 		}
 		internal new FieldInfo GetFieldInfo() => new FieldInfo(base.GetFieldInfo());
