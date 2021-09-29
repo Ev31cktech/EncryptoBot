@@ -1,5 +1,6 @@
 ﻿using EncryptoBot.UITabs;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Threading;
@@ -15,9 +16,12 @@ namespace EncryptoBot
 	{
 		Thread botManagerThread;
 		private ControlWriter consoleWriter;
+		private static EncryptoBotMind botMind;
 		const int port = 45031;
+		List<RLBotDotNet.Bot> botList = new List<RLBotDotNet.Bot>();
 		public EncryptoBotGui()
 		{
+
 			InitializeComponent();
 			RLBotDotNet.BotManager<EncryptoAgent> botManager = new RLBotDotNet.BotManager<EncryptoAgent>(0);
 			consoleWriter = new ControlWriter(ConsolePNL);
@@ -25,10 +29,16 @@ namespace EncryptoBot
 			botManagerThread = new Thread(() => botManager.Start(port));
 			botManagerThread.Start();
 		}
+<<<<<<< HEAD
 
 		private void Button_Click(object sender, RoutedEventArgs e)
 		{
 
+=======
+		public static void AddBot(RLBotDotNet.Bot bot)
+		{
+			botMind.BotList.Add(bot);
+>>>>>>> bb0b8c3c1684fe2e23e66a12b0e8e63f2be3239f
 		}
 	}
 	class ControlWriter : TextWriter

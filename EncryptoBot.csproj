@@ -67,12 +67,16 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="EncryptoBotMind.cs" />
     <Compile Include="Statics.cs" />
     <Compile Include="UITabs\BotGraph.xaml.cs">
       <DependentUpon>BotGraph.xaml</DependentUpon>
     </Compile>
     <Compile Include="UITabs\ConsolePanel.xaml.cs">
       <DependentUpon>ConsolePanel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UITabs\HomePanel.xaml.cs">
+      <DependentUpon>HomePanel.xaml</DependentUpon>
     </Compile>
     <Compile Include="Utilities\DataConversion.cs" />
     <Compile Include="Utilities\Processed\BallPrediction\BallPrediction.cs" />
@@ -109,6 +113,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="UITabs\HomePanel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -136,6 +144,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Moves\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
