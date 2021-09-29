@@ -25,6 +25,11 @@ namespace EncryptoBot
 			botManagerThread = new Thread(() => botManager.Start(port));
 			botManagerThread.Start();
 		}
+
+		private void Button_Click(object sender, RoutedEventArgs e)
+		{
+
+		}
 	}
 	class ControlWriter : TextWriter
 	{

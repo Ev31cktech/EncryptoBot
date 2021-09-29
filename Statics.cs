@@ -17,11 +17,4 @@ namespace EncryptoBot
 			new Vector2( 4096 - (1152 + inset), -5120 + inset),
 			};
 	}
-	static class Vectors
-	{
-		public static Vector2 Vector2Max = new Vector2(1,1);
-		public static Vector2 Vector2Min = new Vector2(-1,-1);
-		public static Vector3 Vector3Max = new Vector3(1,1,1);
-		public static Vector3 Vector3Min = new Vector3(-1,-1,-1);
-	}
 }

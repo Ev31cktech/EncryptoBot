@@ -37,14 +37,10 @@ namespace EncryptoBot
 			float Distance = Vector3.Distance(carLocation, tarLoc);
 			if (Distance < 200)
 				fieldLocInt = ++fieldLocInt % 4;
-			tarLoc = new Vector3(0, 0, 0);
-			//return 
-			DriveTo(tarLoc);
-			return new Controller()
-			{
-				Steer = 1,
-				Throttle = 1
-			};
+			//tarLoc = Vector3.Zero;
+			return 
+				DriveTo(tarLoc);
+			//return new Controller() { Steer = 1, Throttle = 1 };
 		}
 		public Controller DriveTo(Vector3 targetLoc) { return DriveTo(targetLoc, new Controller()); }
 		public Controller DriveTo(Vector3 targetLoc, Controller ctrl)
@@ -55,7 +51,16 @@ namespace EncryptoBot
 			Vector3 RelVelocity = carObject.Location + (carObject.Velocity * new Vector3(-1, 1, -1));
 			Vector3 targetRelLoc = Orientation.RelativeLocation(carObject.Location, targetLoc, carObject.Rotation);
 			Renderer.DrawLine3D(Color.Yellow, carObject.Location, targetLoc);
-			Renderer.DrawLine3D(Color.Green, carObject.Location, RelVelocity);
+			Renderer.DrawLine3D(Color.Green, carObject.Location, carObject.Location + carObject.Velocity);
+			Vector3 OrientVect = carObject.Rotation.Forward;
+			OrientVect *= 1000;
+			OrientVect.Z += 100;
+			Renderer.DrawLine3D(Color.Red, carObject.Location, carObject.Location + OrientVect);
+			Renderer.DrawLine3D(Color.Green, new Vector3(0,0,100), OrientVect);
+			Renderer.DrawString2D(String.Format("Angular: {0}", carObject.AngularVelocity.ToString("0000.00")), Color.White, new Vector2(2, 20), 1, 1);
+			Renderer.DrawString2D(String.Format("Rotation F: {0}", carObject.Rotation.Forward.ToString("0000.00")), Color.White, new Vector2(2, 40), 1, 1);
+			Renderer.DrawString2D(String.Format("Rotation U: {0}", carObject.Rotation.Up.ToString("0000.00")), Color.White, new Vector2(2, 60), 1, 1);
+			Renderer.DrawString2D(String.Format("Rotation R: {0}", carObject.Rotation.Right.ToString("0000.00")), Color.White, new Vector2(2, 80), 1, 1);
 
 			if (distance > CLOSE_TARGET)
 			{
