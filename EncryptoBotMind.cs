@@ -8,9 +8,10 @@ namespace EncryptoBot
 {
 	public class EncryptoBotMind
 	{
-		public List<RLBotDotNet.Bot> BotList { get; set; }
+		public List<RLBotDotNet.Bot> BotList = new List<RLBotDotNet.Bot>();
 		public EncryptoBotMind()
 		{
+			
 		}
 	}
 }

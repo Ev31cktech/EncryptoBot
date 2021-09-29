@@ -20,13 +20,22 @@ namespace EncryptoBot
 		List<RLBotDotNet.Bot> botList = new List<RLBotDotNet.Bot>();
 		public EncryptoBotGui()
 		{
-
+			botMind = new EncryptoBotMind();
 			InitializeComponent();
 			RLBotDotNet.BotManager<EncryptoAgent> botManager = new RLBotDotNet.BotManager<EncryptoAgent>(0);
 			consoleWriter = new ControlWriter(ConsolePNL);
 			Console.SetOut(consoleWriter);
-			botManagerThread = new Thread(() => botManager.Start(port));
-			botManagerThread.Start();
+			DateTime time;
+			try
+			{
+				botManagerThread = new Thread(() => botManager.Start(port));
+				botManagerThread.Start();
+			}
+			catch (Exception e)
+			{
+				Console.Write(e);
+				Console.WriteLine("trying again");
+			}
 		}
 		public static void AddBot(RLBotDotNet.Bot bot) => botMind.BotList.Add(bot);
 	}

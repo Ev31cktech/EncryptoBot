@@ -21,6 +21,7 @@ namespace EncryptoBot
 		DateTime time;
 		int fieldLocInt = 0;
 		float carHeigt = 0;
+		//readonly LookAheadDist = 
 		Packet packet;
 
 		public EncryptoAgent(string botName, int botTeam, int botIndex) : base(botName, botTeam, botIndex)
@@ -36,24 +37,35 @@ namespace EncryptoBot
 
 			float Distance = Vector3.Distance(carLocation, tarLoc);
 			if (Distance < 200)
-				fieldLocInt = ++fieldLocInt % 4;
+				//fieldLocInt = ++fieldLocInt % 4;
+				;
 			//tarLoc = Vector3.Zero;
-			return 
-				DriveTo(tarLoc);
-			//return new Controller() { Steer = 1, Throttle = 1 };
+			return DriveTo(tarLoc);
 		}
 		public Controller DriveTo(Vector3 targetLoc) { return DriveTo(targetLoc, new Controller()); }
 		public Controller DriveTo(Vector3 targetLoc, Controller ctrl)
 		{
 			const int CLOSE_TARGET = 1000;
-			Physics carObject = packet.Players[Index].Physics;
-			float distance = Vector3.Distance(carObject.Location, targetLoc);
-			Vector3 RelVelocity = carObject.Location + (carObject.Velocity * new Vector3(-1, 1, -1));
-			Vector3 targetRelLoc = Orientation.RelativeLocation(carObject.Location, targetLoc, carObject.Rotation);
-			if (distance > CLOSE_TARGET)
+			Player carObject = packet.Players[Index];
+			float distance = Vector3.Distance(carObject.Physics.Location, targetLoc);
+			Vector3 RelVelocity = Orientation.RelativeLocation(carObject.Physics.Location, carObject.Physics.Location + carObject.Physics.Velocity, carObject.Physics.Rotation);
+			Vector3 targetRelLoc = Orientation.RelativeLocation(carObject.Physics.Location, targetLoc, carObject.Physics.Rotation);
+			Vector3 Controller = new Vector3();
+			if (carObject.HasWheelContact)
 			{
-				targetRelLoc.X = Math.Abs(targetRelLoc.X);
+				if (distance > CLOSE_TARGET)
+				{
+					targetRelLoc.X = Math.Abs(targetRelLoc.X);
+				}
+				Controller.X = targetRelLoc.X - RelVelocity.X / 4;
+				Controller.Y = targetRelLoc.Y - RelVelocity.Y / 4;
+				//Controller.X = 1;
+				Renderer.DrawLine3D(Color.Green, Vector3.Zero, targetRelLoc);
+				Renderer.DrawLine3D(Color.Yellow, carObject.Physics.Location, targetLoc);
 			}
+			Controller = Vector3.Clamp(Controller, -Vector3.One, Vector3.One);
+			ctrl.Throttle = Controller.X;
+			ctrl.Steer = Controller.Y;
 			return ctrl;
 		}
 		internal new FieldInfo GetFieldInfo() => new FieldInfo(base.GetFieldInfo());

@@ -5,15 +5,20 @@
 			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
 			 xmlns:local="clr-namespace:EncryptoBot.UITabs"
 			 mc:Ignorable="d"
-			 Header="HomePanel"
+			 Header="Home panel"
 			 d:DesignWidth="1920" d:DesignHeight="1080" >
-    <DockPanel>
-        <Grid DockPanel.Dock="Top">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="1*"/>
+        </Grid.RowDefinitions>
+        <Grid Grid.Column="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="5*"/>
+            </Grid.ColumnDefinitions>
         </Grid>
-        <Grid DockPanel.Dock="Right" Background="Red">
-            <ListBox x:Name="BotList"/>
-        </Grid>
-        <Grid DockPanel.Dock="Bottom"></Grid>
-        <Grid ></Grid>
-    </DockPanel>
+    </Grid>
 </TabItem>
+
+<!--            <ListBox x:Name="BotList"/>-->

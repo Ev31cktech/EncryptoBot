@@ -7,7 +7,5 @@
 			mc:Ignorable="d" 
 			Header="Console Panel"
 			d:DesignHeight="1080" d:DesignWidth="1920">
-    <TextBlock x:Name="ConsoleTBK">
-
-    </TextBlock>
+    <TextBlock x:Name="ConsoleTBK" Padding="5"/>
 </TabItem>
