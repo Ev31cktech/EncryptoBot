@@ -24,7 +24,9 @@ namespace EncryptoBot
 		Packet packet;
 
 		public EncryptoAgent(string botName, int botTeam, int botIndex) : base(botName, botTeam, botIndex)
-		{}
+		{
+			EncryptoBotGui.BotMind
+		}
 		public override Controller GetOutput(rlbot.flat.GameTickPacket gameTickPacket)
 		{
 			packet = new Packet(gameTickPacket);
