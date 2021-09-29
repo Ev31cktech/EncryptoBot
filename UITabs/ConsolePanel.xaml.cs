@@ -24,7 +24,7 @@ namespace EncryptoBot.UITabs
 		public ConsolePanel()
 		{
 			InitializeComponent();
-			Header = "Console Panel";
+			//Header = "Console Panel";
 		}
 	}
 }

@@ -5,7 +5,6 @@ using System.IO;
 using System.Text;
 using System.Threading;
 using System.Windows;
-using System.Windows.Controls;
 
 namespace EncryptoBot
 {
@@ -29,17 +28,7 @@ namespace EncryptoBot
 			botManagerThread = new Thread(() => botManager.Start(port));
 			botManagerThread.Start();
 		}
-<<<<<<< HEAD
-
-		private void Button_Click(object sender, RoutedEventArgs e)
-		{
-
-=======
-		public static void AddBot(RLBotDotNet.Bot bot)
-		{
-			botMind.BotList.Add(bot);
->>>>>>> bb0b8c3c1684fe2e23e66a12b0e8e63f2be3239f
-		}
+		public static void AddBot(RLBotDotNet.Bot bot) => botMind.BotList.Add(bot);
 	}
 	class ControlWriter : TextWriter
 	{
