@@ -62,9 +62,9 @@ namespace EncryptoBot
 			Controller ctrl = new Controller();
 			ctrl.Throttle = GroundCtrl.X;
 			ctrl.Steer = GroundCtrl.Y;
-			ctrl.Roll = AirCtrl.X;
-			ctrl.Pitch = AirCtrl.Y;
-			ctrl.Yaw = AirCtrl.Z;
+			ctrl.Roll = 0;
+			ctrl.Pitch = AirCtrl.Z;
+			ctrl.Yaw = AirCtrl.Y;
 			ctrl.Boost = GroundCtrl.Z == 1;
 			ctrl.Handbrake = GroundCtrl.Z == -1;
 			ctrl.UseItem = UseItem;

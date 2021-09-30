@@ -1,3 +1,5 @@
+using static Bot.Utilities.Processed.Packet.Player;
+
 namespace Bot.Utilities.Processed.Packet
 {
     public class Ball

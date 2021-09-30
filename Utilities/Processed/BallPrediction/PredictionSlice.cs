@@ -1,4 +1,5 @@
 using Bot.Utilities.Processed.Packet;
+using static Bot.Utilities.Processed.Packet.Player;
 
 namespace Bot.Utilities.Processed.BallPrediction
 {
