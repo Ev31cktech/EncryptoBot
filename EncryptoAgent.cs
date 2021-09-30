@@ -57,7 +57,7 @@ namespace EncryptoBot
 				{
 					targetRelLoc.X = Math.Abs(targetRelLoc.X);
 				}
-				Controller.X = targetRelLoc.X - RelVelocity.X / 4;
+				Controller.X = targetRelLoc.X - RelVelocity.X / 4;// should take desel value in account.
 				Controller.Y = targetRelLoc.Y - RelVelocity.Y / 4;
 				//Controller.X = 1;
 				Renderer.DrawLine3D(Color.Green, Vector3.Zero, targetRelLoc);
