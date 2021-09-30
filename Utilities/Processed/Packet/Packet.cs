@@ -18,7 +18,7 @@ namespace Bot.Utilities.Processed.Packet
     public class Packet
     {
         public Player[] Players;
-        public BoostPadState[] BoostPadStates;
+        public FieldInfo. BoostPad[] BoostPadStates;
         public Ball Ball;
         public GameInfo GameInfo;
         public TeamInfo[] Teams;
@@ -29,9 +29,8 @@ namespace Bot.Utilities.Processed.Packet
             for (int i = 0; i < packet.PlayersLength; i++)
                 Players[i] = new Player(packet.Players(i).Value);
 
-            BoostPadStates = new BoostPadState[packet.BoostPadStatesLength];
             for (int i = 0; i < packet.BoostPadStatesLength; i++)
-                BoostPadStates[i] = new BoostPadState(packet.BoostPadStates(i).Value);
+                BoostPadStates[i].BoostPad_Update(packet.BoostPadStates(i).Value);
 
             Ball = new Ball(packet.Ball.Value);
             GameInfo = new GameInfo(packet.GameInfo.Value);

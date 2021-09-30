@@ -67,7 +67,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="CarController.cs" />
     <Compile Include="EncryptoBotMind.cs" />
+    <Compile Include="Moves\Moves.cs" />
     <Compile Include="Statics.cs" />
     <Compile Include="UITabs\BotGraph.xaml.cs">
       <DependentUpon>BotGraph.xaml</DependentUpon>
@@ -85,11 +87,9 @@
     <Compile Include="Utilities\Processed\FieldInfo\FieldInfo.cs" />
     <Compile Include="Utilities\Processed\FieldInfo\GoalInfo.cs" />
     <Compile Include="Utilities\Processed\Packet\Ball.cs" />
-    <Compile Include="Utilities\Processed\Packet\BoostPadState.cs" />
     <Compile Include="Utilities\Processed\Packet\GameInfo.cs" />
     <Compile Include="Utilities\Processed\Packet\Orientation.cs" />
     <Compile Include="Utilities\Processed\Packet\Packet.cs" />
-    <Compile Include="Utilities\Processed\Packet\Physics.cs" />
     <Compile Include="Utilities\Processed\Packet\Player.cs" />
     <Compile Include="Utilities\Processed\Packet\TeamInfo.cs" />
     <Page Include="EncryptoBot GUI.xaml">
@@ -145,8 +145,6 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Moves\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

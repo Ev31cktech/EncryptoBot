@@ -25,7 +25,6 @@ namespace EncryptoBot
 			RLBotDotNet.BotManager<EncryptoAgent> botManager = new RLBotDotNet.BotManager<EncryptoAgent>(0);
 			consoleWriter = new ControlWriter(ConsolePNL);
 			Console.SetOut(consoleWriter);
-			DateTime time;
 			try
 			{
 				botManagerThread = new Thread(() => botManager.Start(port));
