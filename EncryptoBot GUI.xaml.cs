@@ -1,4 +1,5 @@
 ﻿using EncryptoBot.UITabs;
+using RLBotDotNet;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -36,7 +37,10 @@ namespace EncryptoBot
 				Console.WriteLine("trying again");
 			}
 		}
-		public static void AddBot(RLBotDotNet.Bot bot) => botMind.BotList.Add(bot);
+		public static EncryptoBotMind AddBot(RLBotDotNet.Bot bot){
+			botMind.BotList.Add(bot);
+			return botMind;
+		}
 	}
 	class ControlWriter : TextWriter
 	{
