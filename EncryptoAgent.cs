@@ -77,7 +77,7 @@ namespace EncryptoBot
 			float aanlig = Vector3.Distance(carObject.Location, flooredVect);
 			Renderer.DrawString2D(String.Format("{0}",Math.Cos(schuin / aanlig)), Color.White, new Vector2(20,20),1 ,1);
 			Renderer.DrawString2D(String.Format("{0}",Math.Cos(schuin / aanlig) * 180 / Math.PI), Color.White, new Vector2(20,40),1 ,1);
-			if ((Math.Cos(schuin / aanlig) * 180 / Math.PI) > 45 && carObject.HasWheelContact)
+			if (Math.Acos(schuin / aanlig)  > Math.PI / 2 && carObject.HasWheelContact)
 			{
 				Controller.Jump = true;
 			}
