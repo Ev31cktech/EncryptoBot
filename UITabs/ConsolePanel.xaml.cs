@@ -21,10 +21,22 @@ namespace EncryptoBot.UITabs
 	/// </summary>
 	public partial class ConsolePanel : TabItem
 	{
+		bool ScrollViewToBottom = true;
 		public ConsolePanel()
 		{
 			InitializeComponent();
-			//Header = "Console Panel";
+		}
+
+		private void ScrollView_ScrollChanged(object sender, ScrollChangedEventArgs e)
+		{
+			if (e.VerticalChange > 0)
+			{
+				ScrollViewToBottom = e.VerticalOffset + e.ViewportHeight == e.ExtentHeight;
+			}
+			else if(ScrollViewToBottom)
+			{
+				((ScrollViewer)sender).ScrollToBottom();
+			}
 		}
 	}
 }

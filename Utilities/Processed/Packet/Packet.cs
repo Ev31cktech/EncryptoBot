@@ -1,3 +1,5 @@
+using Bot.Utilities.Processed.FieldInfo;
+
 namespace Bot.Utilities.Processed.Packet
 {
     /// <summary>
@@ -18,14 +20,22 @@ namespace Bot.Utilities.Processed.Packet
     public class Packet
     {
         public Player[] Players;
-        public FieldInfo. BoostPad[] BoostPadStates;
+        public BoostPad[] BoostPadStates;
         public Ball Ball;
         public GameInfo GameInfo;
         public TeamInfo[] Teams;
 
-        public Packet(rlbot.flat.GameTickPacket packet)
-        {
+        public Packet(rlbot.flat.GameTickPacket packet, FieldInfo.FieldInfo fieldInfo)
+		{
             Players = new Player[packet.PlayersLength];
+            BoostPadStates = new BoostPad[packet.BoostPadStatesLength];
+            for (int i = 0; i < packet.BoostPadStatesLength; i++)
+                BoostPadStates[i] = fieldInfo.BoostPads[i];
+                
+            Teams = new TeamInfo[packet.TeamsLength];
+        }
+        public void updatePacket(rlbot.flat.GameTickPacket packet)
+        {
             for (int i = 0; i < packet.PlayersLength; i++)
                 Players[i] = new Player(packet.Players(i).Value);
 
@@ -35,9 +45,9 @@ namespace Bot.Utilities.Processed.Packet
             Ball = new Ball(packet.Ball.Value);
             GameInfo = new GameInfo(packet.GameInfo.Value);
 
-            Teams = new TeamInfo[packet.TeamsLength];
             for (int i = 0; i < packet.TeamsLength; i++)
                 Teams[i] = new TeamInfo(packet.Teams(i).Value);
-        }
+
+		}
     }
 }

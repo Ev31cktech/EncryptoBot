@@ -22,11 +22,13 @@ namespace EncryptoBot
 			MainWindow.Width = settings.WindowWidth;
 			MainWindow.Left = settings.WindowLocation.X;
 			MainWindow.Top = settings.WindowLocation.Y;
+			((EncryptoBotGui)MainWindow).tabControl.SelectedIndex = settings.FocusedTab;
 			MainWindow.Show();
 			MainWindow.WindowState = (WindowState)settings.WindowState;
 		}
 		private void Application_Closing(object sender, EventArgs e)
 		{
+			settings.FocusedTab = ((EncryptoBotGui)MainWindow).tabControl.SelectedIndex;
 			settings.WindowHeight = MainWindow.Height;
 			settings.WindowWidth = MainWindow.Width;
 			settings.WindowState = (int)MainWindow.WindowState;

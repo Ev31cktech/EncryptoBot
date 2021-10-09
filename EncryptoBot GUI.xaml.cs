@@ -37,8 +37,8 @@ namespace EncryptoBot
 				Console.WriteLine("trying again");
 			}
 		}
-		public static EncryptoBotMind AddBot(RLBotDotNet.Bot bot){
-			botMind.BotList.Add(bot);
+		public static EncryptoBotMind AddBot(EncryptoAgent bot){
+			botMind.AddBot(bot);
 			return botMind;
 		}
 	}
@@ -53,11 +53,15 @@ namespace EncryptoBot
 		}
 		public override void Write(char value)
 		{
-			consolePanel.Dispatcher.InvokeAsync(() => UpdateText(value.ToString()));
+			consolePanel.Dispatcher.InvokeAsync(() => UpdateChar(value));
+		}
+		public void UpdateChar (char value)
+		{
+			consolePanel.ConsoleTBK.Text += value.ToString();
 		}
 		public void UpdateText(string value)
 		{
-			consolePanel.ConsoleTBK.Text += value;
+			consolePanel.ConsoleTBK.Text += String.Format("[{0}]: {1}",DateTime.Now,value.ToString());
 		}
 
 		public override void Write(string value)

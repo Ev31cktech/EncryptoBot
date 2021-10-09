@@ -12,7 +12,7 @@ namespace Bot.Utilities.Processed.Packet
 		public string Name;
 		private Physics physics;
 		public Vector3 Location => physics.Location;
-		public Vector3 Velocity => physics.Location;
+		public Vector3 Velocity => physics.Velocity;
 		public Vector3 AngularVelocity => physics.Location;
 		public Orientation Rotation => physics.Rotation;
 		public int Team;

@@ -11,7 +11,7 @@
             <MenuItem Header="File"></MenuItem>
         </Menu>
         <StatusBar x:Name="statusBar" DockPanel.Dock="Bottom" Height="20"/>
-        <TabControl>
+        <TabControl x:Name="tabControl" x:FieldModifier="public">
             <uitabs:HomePanel x:Name="HomePNL"/>
             <uitabs:ConsolePanel x:Name="ConsolePNL"/>
         </TabControl>
