@@ -15,8 +15,20 @@ namespace EncryptoBot
 	//		
 	public class CarController
 	{
+		public float Steer {get{ return GroundCtrl.Y;} set{GroundCtrl.Y = value;}}
+		public float Throttle {get{ return GroundCtrl.Y;} set{GroundCtrl.Y = value;}}
+		public float Roll {get{ return GroundCtrl.Y;} set{GroundCtrl.Y = value;}}
+		public float Pitch {get{ return GroundCtrl.Y;} set{GroundCtrl.Y = value;}}
+		public float Yaw {get{ return GroundCtrl.Y;} set{GroundCtrl.Y = value;}}
+		public bool Boost {get{ return GroundCtrl.Z == 1;} set{ GroundCtrl.Z = value? 1: GroundCtrl.Z;}}
+		public bool Drift {get{ return GroundCtrl.Z == -1;} set{ GroundCtrl.Z = value? 1: GroundCtrl.Z;}}
+		public bool Handbrake {get{ return Drift;} set{ Drift = value;}}
+		public bool UseItem {get; set;}
+		public bool Jump {get; set;}
+
+
 		/// <summary>
-		/// A Vector that represents ground movement.
+		/// A 3 component Vector that represents ground movement.
 		/// <list type="bullet">
 		/// <item> Vector.X represents the steering value </item>
 		/// <item> Vector.Y represents Throttle position </item>
@@ -42,15 +54,6 @@ namespace EncryptoBot
 		/// </summary>
 		public Vector3 AirCtrl = new Vector3();
 		/// <summary>
-		/// a boolean indication if the jump button should be pressed
-		/// </summary>
-		public bool Jump;
-		/// <summary>
-		/// a boolean indication if the UseItem button should be pressed
-		/// This is mainly for Rumble and those kind of games
-		/// </summary>
-		public bool UseItem;
-		/// <summary>
 		/// 
 		/// </summary>
 		/// <param name="crController"></param>
@@ -60,11 +63,11 @@ namespace EncryptoBot
 			GroundCtrl = Vector3.Clamp(GroundCtrl, -Vector3.One , Vector3.One);
 			AirCtrl = Vector3.Clamp(AirCtrl, -Vector3.One , Vector3.One);
 			Controller ctrl = new Controller();
-			ctrl.Throttle = GroundCtrl.X;
-			ctrl.Steer = GroundCtrl.Y;
-			ctrl.Roll = AirCtrl.X;
-			ctrl.Pitch = AirCtrl.Y;
-			ctrl.Yaw = AirCtrl.Z;
+			ctrl.Throttle = Throttle;
+			ctrl.Steer = Steer;
+			ctrl.Roll = Roll;
+			ctrl.Pitch = Pitch;
+			ctrl.Yaw = Yaw;
 			ctrl.Boost = GroundCtrl.Z == 1;
 			ctrl.Handbrake = GroundCtrl.Z == -1;
 			ctrl.UseItem = UseItem;
