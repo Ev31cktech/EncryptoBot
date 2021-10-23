@@ -11,7 +11,7 @@ namespace EncryptoBot.Moves
 		public String Name { get; private set; }
 		public bool Done { get; set; }
 		public int Index {get; private set;}
-		public float Priority { get; set; }
+		public float Priority { get; set; } // should move to State
 		public bool Available { get; set; }
 		public void Initialize(string _name, int _index)
 		{
@@ -66,6 +66,10 @@ namespace EncryptoBot.Moves
 			carController.GroundCtrl.Z = 0;
 			return carController.getController();
 		}
+	}
+	public class FlyTo : IMoves
+	{
+
 	}
 }
 /*
