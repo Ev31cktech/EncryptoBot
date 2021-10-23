@@ -1,0 +1,17 @@
+﻿[botmind]
+knows:
+-all moves
+-all info of boostpads and assigns boost 
+-all strategie states of all bots.
+
+-plans path with moves
+-decides stratagy
+
+[moves]
+-returns availability
+-estimates how much time it needs for the move
+-returns controller output
+
+[bot]
+- keeps the planned path
+- updates 

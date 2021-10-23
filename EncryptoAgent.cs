@@ -12,6 +12,9 @@ namespace EncryptoBot
 {
 	public class EncryptoAgent : RLBotDotNet.Bot
 	{
+		public int BoostAmount { get { return carObject.Boost; } }
+		public Player carObject { get { return packet.Players[this.Index]; } }
+		public Vector3 Location { get { return carObject.Location; } }
 		/// Customization<summary>
 		/// Body:	Breakout Type-S
 		/// Livery:	Encryption
@@ -27,22 +30,17 @@ namespace EncryptoBot
 		private EncryptoBotMind BotMind;
 		public Vector3 targetLoc = new Vector3();
 		public List<IMoves> moves;
-
-
 		public EncryptoAgent(string botName, int botTeam, int botIndex) : base("EncryptoBot", botTeam, botIndex)
 		{
 			BotMind = EncryptoBotGui.AddBot(this);
 		}
-		public IMoves getActiveMove()
-		{
-			return moves[0];
-		}
 		public override Controller GetOutput(rlbot.flat.GameTickPacket gameTickPacket)
 		{
-			if(packet == null)
+			if (packet == null)
 				packet = new Packet(gameTickPacket, new FieldInfo(base.GetFieldInfo()));
 			packet.updatePacket(gameTickPacket);
 			targetLoc = new Vector3(Field.DiamondPath[fieldLocInt], carHeigt);
+			targetLoc = packet.Ball.Physics.Location;
 			Vector3 carLocation = packet.Players[Index].Location;
 
 			if (Vector3.Distance(carLocation, targetLoc) < 100)
@@ -54,8 +52,8 @@ namespace EncryptoBot
 			{
 				return new Controller();
 			}
-			Renderer.DrawLine3D(Color.Lime,carLocation,targetLoc);
-			BotMind.UpdatePacket(packet, this);
+			Renderer.DrawLine3D(Color.Lime, carLocation, targetLoc);
+			BotMind.UpdatePacket(this);
 			return moves[0].GetController(this);
 		}
 	}

@@ -13,22 +13,21 @@ namespace EncryptoBot
 	{
 		public List<RLBotDotNet.Bot> BotList = new List<RLBotDotNet.Bot>();
 		private List<IMoves> MovesDict = new List<IMoves>();
-		Packet packet;
 
 		public EncryptoBotMind()
 		{
 			FindAllMoves();
 		}
-		public void UpdatePacket(Packet _packet, EncryptoAgent encAgent)
+		public void UpdatePacket(EncryptoAgent encAgent)
 		{
-			packet = packet == _packet? packet:_packet;
-			encAgent.moves = MovesDict;
-			encAgent.moves.ForEach(m => m.Update(packet, encAgent));
-			if (encAgent.getActiveMove().Done)
+			encAgent.moves[0].Update(encAgent);
+			if (encAgent.moves[0].Done)
 			{
+				encAgent.moves = MovesDict;
+				encAgent.moves.ForEach(m => m.Update(encAgent));
 				encAgent.moves = encAgent.moves.Where( m => m.Available).ToList();
 				encAgent.moves = encAgent.moves.OrderByDescending(m => m.Priority).ToList();
-				encAgent.moves[0].Run(_packet, encAgent);
+				encAgent.moves[0].Run(encAgent);
 			}
 		}
 		public void FindAllMoves()
@@ -37,7 +36,11 @@ namespace EncryptoBot
 				.GetTypes()
 				.Where(t => t.IsSubclassOf(typeof(IMoves)) && !t.IsAbstract)
 				.ToList()
-				.ForEach(t => MovesDict.Add((IMoves)Activator.CreateInstance(t)));
+				.ForEach(t => {
+					IMoves move = (IMoves)Activator.CreateInstance(t);
+					move.Initialize(t.Name,MovesDict.Count);
+					MovesDict.Add(move);
+				});
 		}
 		public void AddBot(EncryptoAgent encAgent)
 		{

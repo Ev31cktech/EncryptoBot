@@ -55,10 +55,10 @@ namespace EncryptoBot
 		/// </summary>
 		/// <param name="crController"></param>
 		/// <returns></returns>
-		public Controller getController()
+		public Controller GetController()
 		{
 			GroundCtrl = Vector3.Clamp(GroundCtrl, -Vector3.One , Vector3.One);
-			AirCtrl = Vector3.Clamp(GroundCtrl, -Vector3.One , Vector3.One);
+			AirCtrl = Vector3.Clamp(AirCtrl, -Vector3.One , Vector3.One);
 			Controller ctrl = new Controller();
 			ctrl.Throttle = GroundCtrl.X;
 			ctrl.Steer = GroundCtrl.Y;

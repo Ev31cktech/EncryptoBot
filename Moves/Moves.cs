@@ -8,6 +8,7 @@ namespace EncryptoBot.Moves
 {
 	public abstract class IMoves
 	{
+		public CarController carController;
 		public String Name { get; private set; }
 		public bool Done { get; set; }
 		public int Index {get; private set;}
@@ -18,74 +19,102 @@ namespace EncryptoBot.Moves
 			Name = _name;
 			Index = _index;
 			Done = true;
+			carController = new CarController();
 		}
-		internal abstract void Run(Packet packet, EncryptoAgent bot);
-		internal abstract void Update(Packet packet, EncryptoAgent bot);
+		internal abstract void Run(EncryptoAgent bot);
+		internal abstract void Update(EncryptoAgent bot);
 		internal abstract Controller GetController(EncryptoAgent bot);
 	}
 	public class StandStil : IMoves
 	{
 
-		internal override void Run(Packet packet, EncryptoAgent bot)
-		{ }
+		internal override void Run(EncryptoAgent bot)
+		{
+			Done = false;
+		}
 
-		internal override void Update(Packet packet, EncryptoAgent bot)
+		internal override void Update( EncryptoAgent bot)
 		{
 			Done = true;
 			Available = true;
 		}
 		internal override Controller GetController(EncryptoAgent bots)
 		{
-			return new CarController().getController();
+			return new CarController().GetController();
 		}
 	}
 	public class DriveTo : IMoves
 	{
 		private const int CLOSE_DISTANCE = 1000;
-		CarController carController;
-		Packet packet;
-		internal override void Run(Packet packet, EncryptoAgent bot)
+		internal override void Run(EncryptoAgent bot)
 		{
-			carController = new CarController();
-		}
-		internal override void Update(Packet _packet, EncryptoAgent bot)
-		{
-			packet = _packet;
-			Available = true;
 			Done = false;
-			Priority = 100;
+		}
+		internal override void Update(EncryptoAgent bot)
+		{
+			Available = true;
+			Priority = 50;
 		}
 		internal override Controller GetController(EncryptoAgent bot)
 		{
-			Player carObject = packet.Players[bot.Index];
+			Player carObject = bot.carObject;
 			Vector3 targetRelLocation = Orientation.RelativeLocation(carObject.Location, bot.targetLoc, carObject.Rotation);
 			Vector3 RelVelocity = Orientation.RelativeLocation(carObject.Location, carObject.Location + carObject.Velocity, carObject.Rotation);
 			targetRelLocation.X += targetRelLocation.X > CLOSE_DISTANCE ? 0 : Math.Abs(targetRelLocation.X) * 2;
 			bot.Renderer.DrawLine3D(Color.Red, carObject.Location, carObject.Location + carObject.Velocity);
 			carController.GroundCtrl = targetRelLocation - RelVelocity / 4;
-			carController.GroundCtrl.Z = 0;
-			return carController.getController();
+			carController.GroundCtrl.Z = targetRelLocation.X < CLOSE_DISTANCE ? 0 : 1;
+			return carController.GetController();
 		}
 	}
-}
-/*
-const int CLOSE_TARGET = 1000;
-Player carObject = packet.Players[Index];
-float distance = Vector3.Distance(carObject.Location, targetLoc);
-Vector3 RelVelocity = Orientation.RelativeLocation(carObject.Location, carObject.Location + carObject.Velocity, carObject.Rotation);
-Vector3 targetRelLoc = Orientation.RelativeLocation(carObject.Location, targetLoc, carObject.Rotation);
-CarController Controller = new CarController();
-if (carObject.HasWheelContact)
-{
-	if (distance > CLOSE_TARGET)
+	public class getBoost : IMoves
 	{
-		targetRelLoc.X = Math.Abs(targetRelLoc.X);
+		internal override void Run(EncryptoAgent bot)
+		{
+			Done = false;
+		}
+
+		internal override void Update(EncryptoAgent bot)
+		{
+		}
+		internal override Controller GetController(EncryptoAgent bot)
+		{
+			carController.GroundCtrl.Z = 1;
+			return carController.GetController();
+		}
 	}
-	Controller.GroundCtrl.X = targetRelLoc.X - RelVelocity.X / 4;// should take desel value in account.
-	Controller.GroundCtrl.Y = targetRelLoc.Y - RelVelocity.Y / 4;
-	//Controller.X = 1;
-	Renderer.DrawLine3D(Color.Green, Vector3.Zero, targetRelLoc);
-	Renderer.DrawLine3D(Color.Yellow, carObject.Location, targetLoc);
+	/*
+	public class Jump : IMoves
+	{
+		internal override void Run(EncryptoAgent bot)
+		{
+			Done = false;
+		}
+
+		internal override void Update(EncryptoAgent bot)
+		{
+		}
+		internal override Controller GetController(EncryptoAgent bot)
+		{
+			carController.GroundCtrl.Z = 1;
+			return carController.GetController();
+		}
+	}
+	public class FlyTo : IMoves
+	{
+
+		internal override void Run(EncryptoAgent bot)
+		{
+		}
+		internal override void Update(EncryptoAgent bot)
+		{
+			Available = bot.BoostAmount > 0;
+			Priority = 0;
+		}
+		internal override Controller GetController(EncryptoAgent bot)
+		{
+			return carController.GetController();
+		}
+	}
+	*/
 }
-return Controller.getController();
-*/
