@@ -3,13 +3,16 @@ knows:
 -all moves
 -all info of boostpads and assigns boost 
 -all strategie states of all bots.
-
--plans path with moves
 -decides stratagy
+
+[States]
+-decides targetLocation
+-plans path with moves
 
 [moves]
 -returns availability
 -estimates how much time it needs for the move
+-length of move(what position it will end at for example for dodges)
 -returns controller output
 
 [bot]

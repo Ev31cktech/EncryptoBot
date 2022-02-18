@@ -1,56 +1,111 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Reflection;
-using EncryptoBot.Moves;
 using System.Linq;
-using Bot.Utilities.Processed.Packet;
+using System.Reflection;
+using System.Collections.Generic;
 using RLBotDotNet;
+using EncryptoBot.Moves;
+using EncryptoBot.States;
+using Bot.Utilities.Processed.Packet;
+using System.Numerics;
+using Bot.Utilities.Processed.BallPrediction;
 
 namespace EncryptoBot
 {
 	public class EncryptoBotMind
 	{
 		public List<RLBotDotNet.Bot> BotList = new List<RLBotDotNet.Bot>();
-		private List<IMoves> MovesDict = new List<IMoves>();
+		private List<IMove> MovesList = new List<IMove>();
+		private List<IState> StatesList = new List<IState>();
+		private IMove DriveToMove;
+		Packet packet = null;
 
 		public EncryptoBotMind()
 		{
 			FindAllMoves();
+			FindAllStates();
+			DriveToMove = MovesList.Find(e => e.Name == "DriveTo");
 		}
 		public void UpdatePacket(EncryptoAgent encAgent)
 		{
-			encAgent.moves[0].Update(encAgent);
-			if (encAgent.moves[0].Done)
+			encAgent.state.Update(encAgent);
+			if (encAgent.state.moves[0].Done)
 			{
-				encAgent.moves = MovesDict;
-				encAgent.moves.ForEach(m => m.Update(encAgent));
-				encAgent.moves = encAgent.moves.Where( m => m.Available).ToList();
-				encAgent.moves = encAgent.moves.OrderByDescending(m => m.Priority).ToList();
-				encAgent.moves[0].Run(encAgent);
+				SetState(encAgent);
+				encAgent.state.Run(encAgent, DriveToMove);
 			}
+		}
+		public void SetState(EncryptoAgent encAgent)
+		{
+			if (!encAgent.carObject.HasWheelContact)
+			{
+				encAgent.state = new Recover();
+			}
+			else if (encAgent.packet.GameInfo.IsKickoffPause)
+			{
+				int closestCarI = 0;
+				Player[] pls = encAgent.packet.Players;
+				for (int i = 0; i < BotList.Count; i++)
+				{
+					if (Vector3.Distance(pls[i].Location, encAgent.packet.Ball.Physics.Location) < Vector3.Distance(pls[closestCarI].Location, encAgent.packet.Ball.Physics.Location))
+						closestCarI = i;
+				}
+				if (pls[closestCarI].Location == encAgent.Location)
+				{
+					encAgent.state = new States.KickOff();
+				}
+				else
+				{
+					encAgent.state = new States.GetSmallBoost();
+				}
+			}
+			else if (encAgent.BoostAmount <.8)
+			{
+				encAgent.state = new States.GetBigBoost();
+
+			}
+			else if (encAgent.BoostAmount < .4)
+			{
+				encAgent.state = new States.GetBigBoost();
+
+			}
+			else
+			{
+				encAgent.state = new States.DriveToBall();
+			}
+			// if ball is going towords our net stop it
+			// if ball is not in their net shoot forward(+ find where ball is going to touch ground and intercept, hitbox calculation)
+		}
+		public void FindAllStates()
+		{
+			Assembly.GetExecutingAssembly()
+				.GetTypes()
+				.Where(t => t.IsSubclassOf(typeof(IState)) && !t.IsAbstract)
+				.ToList()
+				.ForEach(t =>
+				{
+					IState state = (IState)Activator.CreateInstance(t);
+					state.Initialize(t.Name, StatesList.Count);
+					StatesList.Add(state);
+				});
 		}
 		public void FindAllMoves()
 		{
 			Assembly.GetExecutingAssembly()
 				.GetTypes()
-				.Where(t => t.IsSubclassOf(typeof(IMoves)) && !t.IsAbstract)
+				.Where(t => t.IsSubclassOf(typeof(IMove)) && !t.IsAbstract)
 				.ToList()
-				.ForEach(t => {
-					IMoves move = (IMoves)Activator.CreateInstance(t);
-					move.Initialize(t.Name,MovesDict.Count);
-					MovesDict.Add(move);
+				.ForEach(t =>
+				{
+					IMove move = (IMove)Activator.CreateInstance(t);
+					move.Initialize(t.Name, MovesList.Count);
+					MovesList.Add(move);
 				});
 		}
 		public void AddBot(EncryptoAgent encAgent)
 		{
 			BotList.Add(encAgent);
-			encAgent.moves = new List<IMoves>();
-			encAgent.moves.Add(new StandStil());
-		}
-		internal Controller GetMove(int index)
-		{
-			return new Controller();
+			encAgent.state = new DriveToBall();
+			encAgent.state.Run(encAgent, DriveToMove);
 		}
 	}
 }

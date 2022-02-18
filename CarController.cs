@@ -16,10 +16,10 @@ namespace EncryptoBot
 	public class CarController
 	{
 		public float Steer {get{ return GroundCtrl.Y;} set{GroundCtrl.Y = value;}}
-		public float Throttle {get{ return GroundCtrl.Y;} set{GroundCtrl.Y = value;}}
-		public float Roll {get{ return GroundCtrl.Y;} set{GroundCtrl.Y = value;}}
-		public float Pitch {get{ return GroundCtrl.Y;} set{GroundCtrl.Y = value;}}
-		public float Yaw {get{ return GroundCtrl.Y;} set{GroundCtrl.Y = value;}}
+		public float Throttle {get{ return GroundCtrl.X;} set{GroundCtrl.X = value;}}
+		public float Roll {get{ return AirCtrl.X;} set{AirCtrl.X = value;}}
+		public float Pitch {get{ return AirCtrl.Y;} set{AirCtrl.Y = value;}}
+		public float Yaw {get{ return AirCtrl.Z;} set{AirCtrl.Z = value;}}
 		public bool Boost {get{ return GroundCtrl.Z == 1;} set{ GroundCtrl.Z = value? 1: GroundCtrl.Z;}}
 		public bool Drift {get{ return GroundCtrl.Z == -1;} set{ GroundCtrl.Z = value? 1: GroundCtrl.Z;}}
 		public bool Handbrake {get{ return Drift;} set{ Drift = value;}}

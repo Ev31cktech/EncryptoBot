@@ -70,6 +70,7 @@
     <Compile Include="CarController.cs" />
     <Compile Include="EncryptoBotMind.cs" />
     <Compile Include="Moves\Moves.cs" />
+    <Compile Include="States\State.cs" />
     <Compile Include="Statics.cs" />
     <Compile Include="UITabs\BotGraph.xaml.cs">
       <DependentUpon>BotGraph.xaml</DependentUpon>
@@ -136,6 +137,7 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="botFlowchar.drawio" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

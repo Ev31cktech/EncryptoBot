@@ -6,13 +6,12 @@ using System.Numerics;
 
 namespace EncryptoBot.Moves
 {
-	public abstract class IMoves
+	public abstract class IMove
 	{
 		public CarController carController;
 		public String Name { get; private set; }
 		public bool Done { get; set; }
-		public int Index {get; private set;}
-		public float Priority { get; set; } // should move to State
+		public int Index {get; private set;} //what use?
 		public bool Available { get; set; }
 		public void Initialize(string _name, int _index)
 		{
@@ -25,14 +24,12 @@ namespace EncryptoBot.Moves
 		internal abstract void Update(EncryptoAgent bot);
 		internal abstract Controller GetController(EncryptoAgent bot);
 	}
-	public class StandStil : IMoves
+	public class StandStil : IMove
 	{
-
 		internal override void Run(EncryptoAgent bot)
 		{
 			Done = false;
 		}
-
 		internal override void Update( EncryptoAgent bot)
 		{
 			Done = true;
@@ -43,7 +40,7 @@ namespace EncryptoBot.Moves
 			return new CarController().GetController();
 		}
 	}
-	public class DriveTo : IMoves
+	public class DriveTo : IMove
 	{
 		private const int CLOSE_DISTANCE = 1000;
 		internal override void Run(EncryptoAgent bot)
@@ -53,33 +50,18 @@ namespace EncryptoBot.Moves
 		internal override void Update(EncryptoAgent bot)
 		{
 			Available = true;
-			Priority = 50;
+			float dist = Vector3.Distance(bot.targetLoc, bot.Location); 
+			Done = dist < 100;
+			bot.Renderer.DrawString2D(dist.ToString(), Color.Black, new Vector2(0,0),1,1);
 		}
 		internal override Controller GetController(EncryptoAgent bot)
 		{
 			Player carObject = bot.carObject;
-			Vector3 targetRelLocation = Orientation.RelativeLocation(carObject.Location, bot.targetLoc, carObject.Rotation);
-			Vector3 RelVelocity = Orientation.RelativeLocation(carObject.Location, carObject.Location + carObject.Velocity, carObject.Rotation);
-			targetRelLocation.X += targetRelLocation.X > CLOSE_DISTANCE ? 0 : Math.Abs(targetRelLocation.X) * 2;
-			bot.Renderer.DrawLine3D(Color.Red, carObject.Location, carObject.Location + carObject.Velocity);
-			carController.GroundCtrl = targetRelLocation - RelVelocity / 4;
-			carController.GroundCtrl.Z = targetRelLocation.X < CLOSE_DISTANCE ? 0 : 1;
-			return carController.GetController();
-		}
-	}
-	public class getBoost : IMoves
-	{
-		internal override void Run(EncryptoAgent bot)
-		{
-			Done = false;
-		}
-
-		internal override void Update(EncryptoAgent bot)
-		{
-		}
-		internal override Controller GetController(EncryptoAgent bot)
-		{
-			carController.GroundCtrl.Z = 1;
+			bot.targetLoc.Z = 0;
+			Vector3 targetRelLocation = Orientation.RelativeLocation(bot.Location, bot.targetLoc , carObject.Rotation);
+			carController.Steer = Vector3.Normalize(targetRelLocation).Y * 5;
+			carController.Throttle = targetRelLocation.X < CLOSE_DISTANCE ? targetRelLocation.X : Math.Abs(targetRelLocation.X);
+			carController.GroundCtrl.Z = 0;
 			return carController.GetController();
 		}
 	}

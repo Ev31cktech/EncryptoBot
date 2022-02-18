@@ -1,9 +1,8 @@
-﻿using Bot.Utilities.Processed.BallPrediction;
-using Bot.Utilities.Processed.FieldInfo;
+﻿using Bot.Utilities.Processed.FieldInfo;
 using Bot.Utilities.Processed.Packet;
 using EncryptoBot.Moves;
+using EncryptoBot.States;
 using RLBotDotNet;
-using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Numerics;
@@ -13,8 +12,9 @@ namespace EncryptoBot
 	public class EncryptoAgent : RLBotDotNet.Bot
 	{
 		public int BoostAmount { get { return carObject.Boost; } }
-		public Player carObject { get { return packet.Players[this.Index]; } }
+		public Player carObject { get { return packet.Players[Index]; } }
 		public Vector3 Location { get { return carObject.Location; } }
+		public IState state {get {return botState[0]; } set {botState[0] = value; } }
 		/// Customization<summary>
 		/// Body:	Breakout Type-S
 		/// Livery:	Encryption
@@ -25,13 +25,15 @@ namespace EncryptoBot
 		/// </summary>
 		int fieldLocInt = 0;
 		float carHeigt = 0;
-		Packet packet;
+		public Packet packet;
 
 		private EncryptoBotMind BotMind;
 		public Vector3 targetLoc = new Vector3();
-		public List<IMoves> moves;
+		public List<IState> botState = new List<IState>(1);
 		public EncryptoAgent(string botName, int botTeam, int botIndex) : base("EncryptoBot", botTeam, botIndex)
 		{
+			botState = new List<IState>();
+			botState.Add(null);
 			BotMind = EncryptoBotGui.AddBot(this);
 		}
 		public override Controller GetOutput(rlbot.flat.GameTickPacket gameTickPacket)
@@ -39,22 +41,16 @@ namespace EncryptoBot
 			if (packet == null)
 				packet = new Packet(gameTickPacket, new FieldInfo(base.GetFieldInfo()));
 			packet.updatePacket(gameTickPacket);
-			targetLoc = new Vector3(Field.DiamondPath[fieldLocInt], carHeigt);
-			targetLoc = packet.Ball.Physics.Location;
 			Vector3 carLocation = packet.Players[Index].Location;
-
-			if (Vector3.Distance(carLocation, targetLoc) < 100)
-			{
-				fieldLocInt = ++fieldLocInt % 4;
-			}
 
 			if (packet.GameInfo.IsMatchEnded)
 			{
 				return new Controller();
 			}
-			Renderer.DrawLine3D(Color.Lime, carLocation, targetLoc);
 			BotMind.UpdatePacket(this);
-			return moves[0].GetController(this);
+			Renderer.DrawLine3D(Color.Lime, carLocation, targetLoc);
+			return state.moves[0].GetController(this);
+			
 		}
 	}
 }

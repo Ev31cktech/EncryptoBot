@@ -18,7 +18,6 @@ namespace EncryptoBot
 		private ControlWriter consoleWriter;
 		private static EncryptoBotMind botMind;
 		const int port = 45031;
-		List<RLBotDotNet.Bot> botList = new List<RLBotDotNet.Bot>();
 		public EncryptoBotGui()
 		{
 			botMind = new EncryptoBotMind();
