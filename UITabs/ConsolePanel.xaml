@@ -8,6 +8,6 @@
 			Header="Console Panel"
 			d:DesignHeight="1080" d:DesignWidth="1920">
     <ScrollViewer ScrollChanged="ScrollView_ScrollChanged">
-        <TextBlock x:Name="ConsoleTBK" Padding="5"/>
+        <ListBox x:Name="ConsoleLBX" Padding="5"/>
     </ScrollViewer>
 </TabItem>

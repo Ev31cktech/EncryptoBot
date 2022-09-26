@@ -68,6 +68,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="CarController.cs" />
+    <Compile Include="Debugger.cs" />
     <Compile Include="EncryptoBotMind.cs" />
     <Compile Include="Moves\Moves.cs" />
     <Compile Include="States\State.cs" />
