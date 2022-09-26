@@ -13,7 +13,7 @@ namespace EncryptoBot.States
 		public float Priority { get{return getPriority(); }set { priority = value;} } // should move to State
 		public int Index {get;set;}
 		private float priority;
-		public List<IMove> moves = new List<IMove>();
+		public Stack<IMove> moves = new Stack<IMove>();
 		public void Initialize(string Name,int index)
 		{
 			this.Name = Name;
@@ -23,14 +23,23 @@ namespace EncryptoBot.States
 		{
 			return Math.Max(Math.Min(Priority,0), 100);
 		}
-		public abstract void Run(EncryptoAgent bot, IMove move); //TODO IMove is temporary. State should decide best path by itself.
+		public abstract void Run(EncryptoAgent bot); //TODO IMove is temporary. State should decide best path by itself.
 		public abstract void Update(EncryptoAgent bot);
+	}
+	public class EmptyState : IState
+	{
+		public override void Run(EncryptoAgent bot)
+		{}
+
+		public override void Update(EncryptoAgent bot)
+		{
+			moves.Peek().Update(bot);
+		}
 	}
 	public class DriveToBall : IState
 	{
-		public override void Run(EncryptoAgent bot,IMove move)
+		public override void Run(EncryptoAgent bot)
 		{
-			this.moves.Add(move);
 		}
 
 		public override void Update(EncryptoAgent bot)
@@ -53,9 +62,8 @@ namespace EncryptoBot.States
 			}
 			bot.targetLoc = bps[nearestBPIndex].Location;
 		}
-		public override void Run(EncryptoAgent bot, IMove move)
+		public override void Run(EncryptoAgent bot)
 		{
-			this.moves.Add(move);
 		}
 	}
 	public class GetBigBoost : IState
@@ -73,16 +81,14 @@ namespace EncryptoBot.States
 			bot.targetLoc = bps[nearestBPIndex].Location;
 
 		}
-		public override void Run(EncryptoAgent bot, IMove move)
+		public override void Run(EncryptoAgent bot)
 		{
-			this.moves.Add(move);
 		}
 	}
 	public class Recover : IState
 	{
-		public override void Run(EncryptoAgent bot,IMove move)
+		public override void Run(EncryptoAgent bot)
 		{
-			this.moves.Add(move);
 		}
 
 		public override void Update(EncryptoAgent bot)
@@ -91,9 +97,8 @@ namespace EncryptoBot.States
 	
 	public class KickOff : IState
 	{
-		public override void Run(EncryptoAgent bot,IMove move)
+		public override void Run(EncryptoAgent bot)
 		{
-			this.moves.Add(move);
 			bot.targetLoc = bot.packet.Ball.Physics.Location;
 		}
 

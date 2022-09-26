@@ -65,16 +65,20 @@ namespace EncryptoBot.Moves
 			return carController.GetController();
 		}
 	}
-	/*
-	public class Jump : IMoves
+	public class Jump : IMove
 	{
+		public float timeToJump;
+		public float StartTime;
 		internal override void Run(EncryptoAgent bot)
 		{
+			StartTime =  bot.packet.GameInfo.GameTimeRemaining;
 			Done = false;
 		}
 
 		internal override void Update(EncryptoAgent bot)
 		{
+			if(StartTime - timeToJump < bot.packet.GameInfo.GameTimeRemaining || StartTime < bot.packet.GameInfo.GameTimeRemaining - timeToJump )
+				Done = true;
 		}
 		internal override Controller GetController(EncryptoAgent bot)
 		{
@@ -82,21 +86,26 @@ namespace EncryptoBot.Moves
 			return carController.GetController();
 		}
 	}
-	public class FlyTo : IMoves
+	public class FlyTo : IMove
 	{
-
 		internal override void Run(EncryptoAgent bot)
 		{
+			Done = false;
 		}
 		internal override void Update(EncryptoAgent bot)
 		{
 			Available = bot.BoostAmount > 0;
-			Priority = 0;
 		}
 		internal override Controller GetController(EncryptoAgent bot)
 		{
+			Player carObject = bot.carObject;
+			bot.targetLoc.Z = 0;
+			Vector3 targetRelLocation = Orientation.RelativeLocation(bot.Location, bot.targetLoc , carObject.Rotation);
+			bot.Renderer.DrawString2D($"{carObject.Rotation.Pitch}",Color.White,new Vector2(0,0),0,0);
+			carController.GroundCtrl = new Vector3(0,0,0);
+			carController.AirCtrl = new Vector3(0){Y = 1 - carController.Pitch};
+			carController.Boost = true;
 			return carController.GetController();
 		}
 	}
-	*/
 }

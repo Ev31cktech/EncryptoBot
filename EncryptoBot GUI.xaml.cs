@@ -1,9 +1,5 @@
-﻿using EncryptoBot.UITabs;
-using RLBotDotNet;
+﻿using RLBotDotNet;
 using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text;
 using System.Threading;
 using System.Windows;
 
@@ -15,16 +11,14 @@ namespace EncryptoBot
 	public partial class EncryptoBotGui : Window
 	{
 		Thread botManagerThread;
-		private ControlWriter consoleWriter;
 		private static EncryptoBotMind botMind;
 		const int port = 45031;
 		public EncryptoBotGui()
 		{
 			botMind = new EncryptoBotMind();
 			InitializeComponent();
-			RLBotDotNet.BotManager<EncryptoAgent> botManager = new RLBotDotNet.BotManager<EncryptoAgent>(0);
-			consoleWriter = new ControlWriter(ConsolePNL);
-			Console.SetOut(consoleWriter);
+			Debugger.Initialize(ConsolePNL.ConsoleLBX);
+			BotManager<EncryptoAgent> botManager = new BotManager<EncryptoAgent>(0);
 			try
 			{
 				botManagerThread = new Thread(() => botManager.Start(port));
@@ -32,40 +26,12 @@ namespace EncryptoBot
 			}
 			catch (Exception e)
 			{
-				Console.Write(e);
-				Console.WriteLine("trying again");
+				Debugger.Log("{0}",e);
 			}
 		}
 		public static EncryptoBotMind AddBot(EncryptoAgent bot){
 			botMind.AddBot(bot);
 			return botMind;
-		}
-	}
-	class ControlWriter : TextWriter
-	{
-		public ConsolePanel consolePanel { get; private set; }
-		public override Encoding Encoding { get { return Encoding.ASCII; } }
-
-		public ControlWriter(ConsolePanel _control)
-		{
-			consolePanel = _control;
-		}
-		public override void Write(char value)
-		{
-			consolePanel.Dispatcher.InvokeAsync(() => UpdateChar(value));
-		}
-		public void UpdateChar (char value)
-		{
-			consolePanel.ConsoleTBK.Text += value.ToString();
-		}
-		public void UpdateText(string value)
-		{
-			consolePanel.ConsoleTBK.Text += String.Format("[{0}]: {1}",DateTime.Now,value.ToString());
-		}
-
-		public override void Write(string value)
-		{
-			consolePanel.Dispatcher.InvokeAsync(() => UpdateText(value.ToString()));
 		}
 	}
 }

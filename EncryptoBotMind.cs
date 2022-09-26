@@ -7,7 +7,6 @@ using EncryptoBot.Moves;
 using EncryptoBot.States;
 using Bot.Utilities.Processed.Packet;
 using System.Numerics;
-using Bot.Utilities.Processed.BallPrediction;
 
 namespace EncryptoBot
 {
@@ -16,22 +15,23 @@ namespace EncryptoBot
 		public List<RLBotDotNet.Bot> BotList = new List<RLBotDotNet.Bot>();
 		private List<IMove> MovesList = new List<IMove>();
 		private List<IState> StatesList = new List<IState>();
-		private IMove DriveToMove;
 		Packet packet = null;
 
 		public EncryptoBotMind()
 		{
 			FindAllMoves();
 			FindAllStates();
-			DriveToMove = MovesList.Find(e => e.Name == "DriveTo");
 		}
 		public void UpdatePacket(EncryptoAgent encAgent)
 		{
+			if(encAgent.state.moves.Peek().GetType() == typeof(Jump) && ((Jump)encAgent.state.moves.Peek()).StartTime == 0)
+				encAgent.state.moves.Peek().Run(encAgent);
+
 			encAgent.state.Update(encAgent);
-			if (encAgent.state.moves[0].Done)
+			if (encAgent.state.moves.Peek().Done)
 			{
-				SetState(encAgent);
-				encAgent.state.Run(encAgent, DriveToMove);
+				encAgent.state.moves.Pop();
+				encAgent.state.moves.Peek().Run(encAgent);
 			}
 		}
 		public void SetState(EncryptoAgent encAgent)
@@ -66,7 +66,6 @@ namespace EncryptoBot
 			else if (encAgent.BoostAmount < .4)
 			{
 				encAgent.state = new States.GetBigBoost();
-
 			}
 			else
 			{
@@ -103,9 +102,10 @@ namespace EncryptoBot
 		}
 		public void AddBot(EncryptoAgent encAgent)
 		{
+			Debugger.Info("");
 			BotList.Add(encAgent);
-			encAgent.state = new DriveToBall();
-			encAgent.state.Run(encAgent, DriveToMove);
+			encAgent.state = new EmptyState();
+			encAgent.state.Run(encAgent);
 		}
 	}
 }

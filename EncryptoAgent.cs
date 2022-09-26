@@ -49,8 +49,7 @@ namespace EncryptoBot
 			}
 			BotMind.UpdatePacket(this);
 			Renderer.DrawLine3D(Color.Lime, carLocation, targetLoc);
-			return state.moves[0].GetController(this);
-			
+			return state.moves.Peek().GetController(this);
 		}
 	}
 }
