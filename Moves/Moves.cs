@@ -24,7 +24,7 @@ namespace EncryptoBot.Moves
 		internal abstract void Update(EncryptoAgent bot);
 		internal abstract Controller GetController(EncryptoAgent bot);
 	}
-	public class StandStil : IMove
+	public class StandStill : IMove
 	{
 		internal override void Run(EncryptoAgent bot)
 		{

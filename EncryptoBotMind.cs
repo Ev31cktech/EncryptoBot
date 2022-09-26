@@ -24,21 +24,18 @@ namespace EncryptoBot
 		}
 		public void UpdatePacket(EncryptoAgent encAgent)
 		{
-			if(encAgent.state.moves.Peek().GetType() == typeof(Jump) && ((Jump)encAgent.state.moves.Peek()).StartTime == 0)
-				encAgent.state.moves.Peek().Run(encAgent);
-
-			encAgent.state.Update(encAgent);
-			if (encAgent.state.moves.Peek().Done)
+			encAgent.State.Update(encAgent);
+			if (encAgent.State.moves.Peek().Done)
 			{
-				encAgent.state.moves.Pop();
-				encAgent.state.moves.Peek().Run(encAgent);
+				encAgent.State.moves.Pop();
+				encAgent.State.moves.Peek().Run(encAgent);
 			}
 		}
 		public void SetState(EncryptoAgent encAgent)
 		{
 			if (!encAgent.carObject.HasWheelContact)
 			{
-				encAgent.state = new Recover();
+				encAgent.State = new Recover();
 			}
 			else if (encAgent.packet.GameInfo.IsKickoffPause)
 			{
@@ -51,25 +48,25 @@ namespace EncryptoBot
 				}
 				if (pls[closestCarI].Location == encAgent.Location)
 				{
-					encAgent.state = new States.KickOff();
+					encAgent.State = new States.KickOff();
 				}
 				else
 				{
-					encAgent.state = new States.GetSmallBoost();
+					encAgent.State = new States.GetSmallBoost();
 				}
 			}
 			else if (encAgent.BoostAmount <.8)
 			{
-				encAgent.state = new States.GetBigBoost();
+				encAgent.State = new States.GetBigBoost();
 
 			}
 			else if (encAgent.BoostAmount < .4)
 			{
-				encAgent.state = new States.GetBigBoost();
+				encAgent.State = new States.GetBigBoost();
 			}
 			else
 			{
-				encAgent.state = new States.DriveToBall();
+				encAgent.State = new States.DriveToBall();
 			}
 			// if ball is going towords our net stop it
 			// if ball is not in their net shoot forward(+ find where ball is going to touch ground and intercept, hitbox calculation)
@@ -104,8 +101,8 @@ namespace EncryptoBot
 		{
 			Debugger.Info("");
 			BotList.Add(encAgent);
-			encAgent.state = new EmptyState();
-			encAgent.state.Run(encAgent);
+			encAgent.State = new StandStill();
+			encAgent.State.Run(encAgent);
 		}
 	}
 }

@@ -26,7 +26,7 @@ namespace EncryptoBot.States
 		public abstract void Run(EncryptoAgent bot); //TODO IMove is temporary. State should decide best path by itself.
 		public abstract void Update(EncryptoAgent bot);
 	}
-	public class EmptyState : IState
+	public class StandStill : IState
 	{
 		public override void Run(EncryptoAgent bot)
 		{}
@@ -44,7 +44,7 @@ namespace EncryptoBot.States
 
 		public override void Update(EncryptoAgent bot)
 		{
-			bot.targetLoc = bot.packet.Ball.Physics.Location;
+			bot.TargetLocation = bot.packet.Ball.Physics.Location;
 			Priority = 1;
 		}
 	}
@@ -60,7 +60,7 @@ namespace EncryptoBot.States
 				if (Vector3.Distance(bot.Location,bps[i].Location) < Vector3.Distance(bot.Location, bps[nearestBPIndex].Location))
 					nearestBPIndex = i;
 			}
-			bot.targetLoc = bps[nearestBPIndex].Location;
+			bot.TargetLocation = bps[nearestBPIndex].Location;
 		}
 		public override void Run(EncryptoAgent bot)
 		{

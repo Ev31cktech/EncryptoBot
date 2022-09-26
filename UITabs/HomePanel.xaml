@@ -14,11 +14,16 @@
         </Grid.RowDefinitions>
         <Grid Grid.Column="1">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="1*"/>
                 <ColumnDefinition Width="5*"/>
+                <ColumnDefinition Width="1*"/>
             </Grid.ColumnDefinitions>
         </Grid>
+        <DataGrid Grid.Row="1" Grid.Column="1" Name="BotDTG">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Name"/>
+                <DataGridTextColumn Header=""/>
+                <DataGridTextColumn Header=""/>
+            </DataGrid.Columns>
+        </DataGrid>
     </Grid>
 </TabItem>
-
-<!--            <ListBox x:Name="BotList"/>-->
